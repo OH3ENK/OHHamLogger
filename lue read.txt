@@ -1,0 +1,330 @@
+HamLogger - Asennus- ja käyttöohje
+Sisältö
+1. Yleiskuvaus
+2. Vaatimukset
+3. Asennus
+4. Käyttöönotto
+5. Peruskäyttö
+6. WWFF-lokitus
+7. ADIF-vienti
+8. Vianetsintä
+Yleiskuvaus
+HamLogger on radioamatööreille suunniteltu lokiohjelma, joka tukee ADIF 3.1.0 -formaatia ja WWFF-lokien tallennusta. Ohjelma on kehitetty Pythonilla ja se toimii Windows, Linux ja macOS -käyttöjärjestelmissä.
+Vaatimukset
+Pakolliset vaatimukset:
+Python 3.8 tai uudempi
+tkinter (tulee yleensä Pythonin mukana)
+Tarkista Pythonin asennus:
+bash
+python --version
+# tai
+python3 --version
+Asenna tarvittaessa Python:
+Windows: Lataa python.org:sta
+Linux: sudo apt install python3 python3-tk
+macOS: brew install python3
+Asennus
+1. Lataa ohjelma
+Lataa hamlogger.py tiedosto GitHubista tai kopioi koodi tekstitiedostoon nimeltä hamlogger.py
+2. Asenna suoraan Pythonilla
+Windows:
+cmd
+# Siirry hakemistoon, jossa hamlogger.py sijaitsee
+cd polku\hakemistoon
+
+# Suorita ohjelma
+python hamlogger.py
+Linux/macOS:
+bash
+# Siirry hakemistoon, jossa hamlogger.py sijaitsee
+cd /polku/hakemistoon
+
+# Tee tiedosto suoritettavaksi
+chmod +x hamlogger.py
+
+# Suorita ohjelma
+python3 hamlogger.py
+3. Vaihtoehtoinen asennus (batch-tiedosto)
+Windows (hamlogger.bat):
+batch
+@echo off
+cd /d "%~dp0"
+python hamlogger.py
+pause
+Linux/macOS (hamlogger.sh):
+bash
+#!/bin/bash
+cd "$(dirname "$0")"
+python3 hamlogger.py
+Käyttöönotto
+1. Ensimmäinen käynnistys
+Kun käynnistät ohjelman ensimmäistä kertaa:
+Ohjelma luo automaattisesti ~/hamlog/ hakemiston
+Asetustiedosto tallennetaan ~/hamlog/settings.json
+ADI-tiedostot tallennetaan ~/hamlog/adi/ hakemistoon
+2. Perusasetusten määrittäminen
+1. Valitse Asetukset ? Radioaseman tiedot
+2. Täytä pakolliset kentät:
+Oma kutsu: Esim. OH3ENK
+Locator: Esim. KP20TH
+Oma WWFF: Esim. OHFF-0029 (valinnainen)
+Oletusband: Esim. 20m
+Oletusmode: Esim. SSB
+3. Valitse teema ja kieli
+4. Paina Tallenna
+Peruskäyttö
+QSO:n syöttö
+Syöttöriville kirjoitetaan seuraavassa muodossa:
+text
+KUTSU RST-LÄHETETTY RST-SAATU KOMMENTTI
+Esimerkkejä:
+bash
+OH2ABC 59 59
+OH2XYZ 59 59 Hyvä keskustelu
+OH2TEST 57 59 Heikko signaali
+Pikakomennot
+Bandin vaihto:
+Kirjoita numero: 20 ? 20m
+Kirjoita numero + m: 40m ? 40m
+Pilkku + numero: ,70 ? 70cm
+Moden vaihto:
+Kirjoita mode: CW ? CW-mode
+Kirjoita mode: FT8 ? FT8-mode
+Toimintopainikkeet
+Tallenna ADI: Tallenny koko loki ADI-tiedostona
+Avaa loki: Avaa aiemmin tallennettu ADI-tiedosto
+Tallenna ja sulje: Tallentaa muutokset ja sulkee ohjelman
+WWFF-lokitus
+WWFF-QSO:n syöttö
+Syötä WWFF-tunnus RST-raportin jälkeen:
+text
+KUTSU RST-LÄHETETTY RST-SAATU WWFF-TUNNUS KOMMENTTI
+Esimerkkejä:
+bash
+OH2XYZ 59 59 OHFF-1234
+OH2ABC 59 59 FF-5678 Hyvä keskustelu
+OH2TEST 57 59 DLFF-9012 Heikko signaali
+Tuetut WWFF-muodot:
+OHFF-1234
+FF-5678
+DLFF-9012
+SMFF-3456
+ADIF-vienti
+Automaattinen nimeäminen
+Ohjelma nimeää ADI-tiedostot automaattisesti:
+OMAKUTSU@WWFF-ALUE.adi (jos WWFF on asetettu)
+OMAKUTSU@LOCATOR.adi (jos WWFF ei ole asetettu)
+Täydellinen ADIF-rakenne
+Ohjelma luo ADIF-tiedostot, jotka sisältävät:
+xml
+<STATION_CALLSIGN:6>OH3ENK
+<MY_SIG:4>WWFF
+<MY_SIG_INFO:9>OHFF-0029
+<SIG:4>WWFF
+<SIG_INFO:9>OHFF-1234
+<OPERATOR:6>OH3ENK
+Osittainen vienti
+Voit viedä vain tietyn ajanjakson QSO:ita:
+1. Valitse Tiedosto ? Vie osa lokista
+2. Valitse alkamis- ja päättymispäivämäärät
+3. Tallenna osittainen loki
+Vianetsintä
+Yleisimmät ongelmat
+Ohjelma ei käynnisty:
+Tarkista että Python on asennettu: python --version
+Tarkista että tkinter on saatavilla: python -m tkinter (avaa testi-ikkuna)
+Tiedostoja ei voi tallentaa:
+Tarkista käyttöoikeudet hakemistoihin
+Varmista että kovalevylle on tilaa
+ADIF-tiedostoja ei voi lukea:
+Tarkista että tiedosto on validi ADIF-muoto
+Kokeile muuntaa tiedosto UTF-8 -enkoodaukseen
+WWFF-tunnuksia ei tunnisteta:
+Varmista että tunnus on muodossa MAATUNNUSFF-NUMERO
+Tarkista että tunnus on RST-raportin jälkeen
+Lokitiedostot
+Ohjelma luo lokitiedostoja:
+~/hamlog/hamlogger.log (sovelluslokit)
+~/hamlog/settings.json (asetukset)
+Resursseja
+ADIF-standardi
+WWFF-ohjelma
+Python-dokumentaatio
+Tuki
+Jos kohtaat ongelmia:
+1. Tarkista että käytät uusinta versiota
+2. Tarkista asetustiedoston sisältö
+3. Kokeile uudelleenkäynnistää ohjelma
+4. Ota yhteys kehittäjään
+Kehittäjä: OH3ENK
+Versio: 1.0.0
+
+HamLogger - Yksinkertainen ja tehokas lokinpito radioamatööreille
+
+
+
+
+
+
+HamLogger - Installation and User Guide
+Contents
+1. Overview
+2. Requirements
+3. Installation
+4. Getting Started
+5. Basic Usage
+6. WWFF Logging
+7. ADIF Export
+8. Troubleshooting
+Overview
+HamLogger is a logging program designed for amateur radio operators, supporting ADIF 3.1.0 format and WWFF log recording. The program is developed in Python and works on Windows, Linux, and macOS operating systems.
+Requirements
+Mandatory requirements:
+Python 3.8 or newer
+tkinter (usually comes with Python)
+Check Python installation:
+bash
+python --version
+# or
+python3 --version
+Install Python if necessary:
+Windows: Download from python.org
+Linux: sudo apt install python3 python3-tk
+macOS: brew install python3
+Installation
+1. Download the program
+Download the hamlogger.py file from GitHub or copy the code into a text file named hamlogger.py
+2. Install directly with Python
+Windows:
+cmd
+# Navigate to the directory where hamlogger.py is located
+cd path\to\directory
+
+# Run the program
+python hamlogger.py
+Linux/macOS:
+bash
+# Navigate to the directory where hamlogger.py is located
+cd /path/to/directory
+
+# Make the file executable
+chmod +x hamlogger.py
+
+# Run the program
+python3 hamlogger.py
+3. Alternative installation (batch file)
+Windows (hamlogger.bat):
+batch
+@echo off
+cd /d "%~dp0"
+python hamlogger.py
+pause
+Linux/macOS (hamlogger.sh):
+bash
+#!/bin/bash
+cd "$(dirname "$0")"
+python3 hamlogger.py
+Getting Started
+1. First startup
+When you start the program for the first time:
+The program automatically creates the ~/hamlog/ directory
+Settings file is saved to ~/hamlog/settings.json
+ADI files are saved to the ~/hamlog/adi/ directory
+2. Configuring basic settings
+1. Select Settings ? Station Details
+2. Fill in the mandatory fields:
+My Callsign: e.g., OH3ENK
+Locator: e.g., KP20TH
+My WWFF: e.g., OHFF-0029 (optional)
+Default Band: e.g., 20m
+Default Mode: e.g., SSB
+3. Select theme and language (Asetukset-Radioaseman tiedot-Kieli)
+4. Press Save
+Basic Usage
+QSO Entry
+Enter on the input line in the following format:
+text
+CALLSIGN RST-SENT RST-RECEIVED COMMENT
+Examples:
+text
+OH2ABC 59 59
+OH2XYZ 59 59 Good conversation
+OH2TEST 57 59 Weak signal
+Quick Commands
+Band change:
+Enter number: 20 ? 20m
+Enter number + m: 40m ? 40m
+Comma + number: ,70 ? 70cm
+Mode change:
+Enter mode: CW ? CW mode
+Enter mode: FT8 ? FT8 mode
+Action Buttons
+Save ADI: Saves entire log as ADI file
+Open Log: Opens previously saved ADI file
+Save and Close: Saves changes and closes the program
+WWFF Logging
+WWFF QSO Entry
+Enter WWFF identifier after the RST report:
+text
+CALLSIGN RST-SENT RST-RECEIVED WWFF-IDENTIFIER COMMENT
+Examples:
+text
+OH2XYZ 59 59 OHFF-1234
+OH2ABC 59 59 FF-5678 Good conversation
+OH2TEST 57 59 DLFF-9012 Weak signal
+Supported WWFF formats:
+OHFF-1234
+FF-5678
+DLFF-9012
+SMFF-3456
+ADIF Export
+Automatic naming
+The program automatically names ADI files:
+MYCALLSIGN@WWFF-AREA.adi (if WWFF is set)
+MYCALLSIGN@LOCATOR.adi (if WWFF is not set)
+Complete ADIF structure
+The program creates ADI files containing:
+xml
+<STATION_CALLSIGN:6>OH3ENK
+<MY_SIG:4>WWFF
+<MY_SIG_INFO:9>OHFF-0029
+<SIG:4>WWFF
+<SIG_INFO:9>OHFF-1234
+<OPERATOR:6>OH3ENK
+Partial export
+You can export only QSOs from a specific time period:
+1. Select File ? Export Part of Log
+2. Select start and end dates
+3. Save partial log
+Troubleshooting
+Most common problems
+Program won't start:
+Check that Python is installed: python --version
+Check that tkinter is available: python -m tkinter (opens test window)
+Cannot save files:
+Check directory permissions
+Ensure there is disk space available
+Cannot read ADIF files:
+Check that the file is valid ADIF format
+Try converting the file to UTF-8 encoding
+WWFF identifiers not recognized:
+Ensure the identifier is in format COUNTRYCODEFF-NUMBER
+Check that the identifier is after the RST report
+Log files
+The program creates log files:
+~/hamlog/hamlogger.log (application logs)
+~/hamlog/settings.json (settings)
+Resources
+ADIF standard
+WWFF program
+Python documentation
+Support
+If you encounter problems:
+1. Check that you are using the latest version
+2. Check the contents of the settings file
+3. Try restarting the program
+4. Contact the developer
+Developer: OH3ENK
+Version: 1.0.0
+HamLogger - Simple and efficient logging for amateur radio operators
+
