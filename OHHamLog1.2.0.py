@@ -63,7 +63,7 @@ class HamLogger:
         self.start_auto_backup()
         
         # YRITÄ AVATA VIIMEKSI KÄYTETTY LOKI
-        self.auto_open_last_log()
+        self.root.after(500, self.auto_open_last_log)
         
     def setup_data_dir(self):
         """Luo tietokansiot tarvittaessa"""
@@ -83,6 +83,10 @@ class HamLogger:
                             self.settings[key] = loaded_settings[key]
                     
                     self.language = self.settings.get('language', 'suomi')
+                     # Tarkista että viimeisen lokin tiedosto on olemassa
+                    if self.settings.get('last_log_file') and not os.path.exists(self.settings['last_log_file']):
+                        self.settings['last_log_file'] = None
+                        self.save_settings()                   
         except Exception as e:
             print(f"Asetustiedoston lataus epäonnistui: {e}")
     
@@ -154,15 +158,31 @@ class HamLogger:
     
     def auto_open_last_log(self):
         """Yritä avata viimeksi käytetty loki automaattisesti"""
-        if self.settings.get('auto_open_last', True) and self.settings.get('last_log_file'):
-            last_log = self.settings['last_log_file']
-            if os.path.exists(last_log):
+        try:
+            if (self.settings.get('auto_open_last', True) and 
+                self.settings.get('last_log_file') and 
+                os.path.exists(self.settings['last_log_file'])):
+                
+                last_log = self.settings['last_log_file']
+                
+                # Tarkista että tiedosto on luettavissa
+                try:
+                    with open(last_log, 'r', encoding='utf-8') as f:
+                        test_content = f.read(100)  # Lue vain pieni osa testiksi
+                except:
+                    print("Edellinen lokitiedosto ei ole luettavissa")
+                    return
+                
                 response = messagebox.askyesno(
                     "Avaa edellinen loki",
                     f"Haluatko avata viimeksi käytetyn lokin?\n{os.path.basename(last_log)}"
                 )
                 if response:
-                    self.load_log_file(last_log)
+                    success = self.load_log_file(last_log)
+                    if not success:
+                        messagebox.showerror("Virhe", "Edellisen lokin avaaminen epäonnistui")
+        except Exception as e:
+            print(f"Automaattisen lokin avaus epäonnistui: {e}")
     
     def load_log_file(self, filename):
         """Lataa lokitiedosto (käytetään auto_open_last_log:ssa)"""
@@ -174,13 +194,15 @@ class HamLogger:
                 try:
                     with open(filename, 'r', encoding=encoding) as f:
                         content = f.read()
+                    print(f"Tiedosto luettu onnistuneesti enkoodauksella: {encoding}")
                     break
                 except UnicodeDecodeError:
                     continue
             
             if content is None:
+                messagebox.showerror("Tiedoston avausvirhe", "Tiedoston enkoodausta ei tunnistettu.")
                 return False
-            
+            self.log_entries = []  
             success_count = self.parse_adi_content(content)
             
             if success_count > 0:
@@ -202,10 +224,11 @@ class HamLogger:
                 
                 return True
             else:
+                messagebox.showwarning("Ei dataa", "Tiedostosta ei löytynyt luettavaa QSO-dataa")
                 return False
                 
         except Exception as e:
-            print(f"Lokin automaattinen avaus epäonnistui: {e}")
+            messagebox.showerror("Avausvirhe", f"Tiedoston avaus epäonnistui: {str(e)}") 
             return False
 
     def import_text_log(self):
@@ -1348,7 +1371,7 @@ More info: https://github.com/oh3enk/hamlogger
     
     def update_clock(self):
         """Päivitä UTC-kello sekunneilla"""
-        utc_time = datetime.datetime.utcnow().strftime('UTC: %H:%M:%S')
+        utc_time = datetime.datetime.now(datetime.UTC).strftime('UTC: %H:%M:%S')
         self.clock_label.config(text=utc_time)
         self.root.after(1000, self.update_clock)
     
