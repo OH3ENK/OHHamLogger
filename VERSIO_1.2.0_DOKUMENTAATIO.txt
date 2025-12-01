@@ -1,0 +1,186 @@
+═══════════════════════════════════════════════════════════════
+  OHHamLogger v1.2.0 - TOIMIVA VERSIO
+  Kehittäjä: OH3ENK
+  Päivitetty: 1.12.2024
+═══════════════════════════════════════════════════════════════
+
+TIEDOSTO: OHHamLog1_2_0_TOIMIVA_VERSIO.py
+RIVEJÄ: 2520
+KIELI: Python 3 + Tkinter
+
+═══════════════════════════════════════════════════════════════
+UUDET OMINAISUUDET V1.2.0:
+═══════════════════════════════════════════════════════════════
+
+1. FREEDV MODE
+   ✓ Lisätty FreeDV-mode kaikkiin mode-listoihin
+   ✓ Toimii syötössä, tallennuksessa ja latauksessa
+   ✓ ADI-yhteensopiva
+
+2. WWFF-TUNNISTUS PARANNETTU
+   ✓ WWFF-viite tunnistetaan syötöstä (esim. OHFF-1234)
+   ✓ Tallennetaan oikein SIG ja SIG_INFO kenttiin
+   ✓ EI ENÄÄ mene COMMENT-kenttään
+   ✓ Tukee myös vanhoja WWFF_REF ja MY_WWFF_REF kenttiä
+
+3. GMT/UTC AIKA
+   ✓ Kaikki ajat GMT/UTC-ajassa
+   ✓ 24h järjestelmä (00:00:00 - 23:59:59)
+   ✓ Kellonäyttö: "UTC: HH:MM:SS"
+
+4. MUOKKAUS AJON AIKANA
+   ✓ Kaksoisklikkaus lokirivistä → Muokkaa
+   ✓ Oikea hiiren painike → Valikko (Muokkaa/Poista)
+   ✓ Muokattavat kentät:
+     - Kutsu
+     - Bandi (combobox)
+     - Mode (combobox)
+     - RST Lähetetty
+     - RST Vastaanotettu
+     - WWFF-viite
+     - Kommentti
+
+5. LOKIEN YHDISTÄMINEN
+   ✓ Yhdistää kaksi ADI-lokia
+   ✓ Järjestää aikajärjestykseen
+   ✓ Poistaa duplikaatit
+   ✓ Kysyy ylikirjoitusta
+
+6. TEEMAT (5 kpl)
+   ✓ Oletus - tumma siniharmaa
+   ✓ Yö - tumma harmaa
+   ✓ Retro - MUSTA tausta, VIHREÄ teksti
+   ✓ Elegantti - sininen
+   ✓ Klassinen amatööri - Windows 95 harmaa
+
+7. QSO-LOKIN VÄRIT
+   ✓ RETRO: Musta tausta, vihreä teksti, punainen duplikaatit
+   ✓ MUUT: Vaalea tausta, musta teksti, punainen duplikaatit
+
+8. ADI-YHTEENSOPIVUUS
+   ✓ Tukee sekä QSO_DATE että DATE kenttiä
+   ✓ Tukee sekä SIG_INFO että WWFF_REF kenttiä
+   ✓ Lukee myös "paskalokeja" (väärällä formaatilla)
+
+═══════════════════════════════════════════════════════════════
+SYÖTTÖMUOTO:
+═══════════════════════════════════════════════════════════════
+
+PERUS QSO:
+OH1ABC 59 59
+
+QSO + WWFF:
+OH1ABC 59 59 OHFF-1234
+
+QSO + WWFF + KOMMENTTI:
+OH1ABC 59 59 OHFF-1234 Mukava QSO
+
+HUOM: Syöttörivin otsikko: "Syöttörivi: (RST saatu/annettu)"
+
+═══════════════════════════════════════════════════════════════
+ADI-TALLENNUSMUOTO:
+═══════════════════════════════════════════════════════════════
+
+KENTTIEN JÄRJESTYS:
+1. STATION_CALLSIGN
+2. CALL
+3. QSO_DATE
+4. TIME_ON
+5. BAND
+6. MODE
+7. RST_SENT
+8. RST_RCVD
+9. MY_SIG (jos mywwff asetettu)
+10. MY_SIG_INFO (jos mywwff asetettu)
+11. SIG (jos vastapuolen WWFF)
+12. SIG_INFO (jos vastapuolen WWFF)
+13. MY_GRIDSQUARE
+14. COMMENT (vain jos ei tyhjä)
+15. OPERATOR
+16. EOR
+
+TIEDOSTONIMI:
+- Jos WWFF: OH3ENK@OHFF-0029.adi
+- Jos locator: OH3ENK@KP20TH.adi
+- Muuten: OH3ENK.adi
+
+═══════════════════════════════════════════════════════════════
+TUETUT BANDIT:
+═══════════════════════════════════════════════════════════════
+
+160m, 80m, 60m, 40m, 30m, 20m, 17m, 15m, 12m, 10m, 6m, 2m, 70cm
+
+═══════════════════════════════════════════════════════════════
+TUETUT MODET:
+═══════════════════════════════════════════════════════════════
+
+SSB, LSB, USB, CW, FM, AM, FT8, FT4, RTTY, PSK, FreeDV
+
+═══════════════════════════════════════════════════════════════
+WWFF-TUNNISTUS:
+═══════════════════════════════════════════════════════════════
+
+TUETUT MUODOT:
+- OHFF-1234 (Suomi)
+- DLFF-1234 (Saksa)
+- GFF-1234 (UK)
+- GMFF-1234, GWFF-1234, GIFF-1234, GUFF-1234 (UK alueet)
+- FF-OH-1234 (vaihtoehtoinen muoto)
+
+TUNNISTUS:
+- 2-4 kirjaimen prefix + FF + 1-4 numeron tunnus
+- Poistetaan automaattisesti comment-kentästä
+- Tallennetaan SIG ja SIG_INFO kenttiin
+
+═══════════════════════════════════════════════════════════════
+PIKANÄPPÄIMET:
+═══════════════════════════════════════════════════════════════
+
+Enter        = Tallenna QSO
+Kaksoisklikkaus = Muokkaa QSOta
+Oikea hiiri  = Muokkaa/Poista valikko
+
+═══════════════════════════════════════════════════════════════
+TEKNISET TIEDOT:
+═══════════════════════════════════════════════════════════════
+
+Python-versio: 3.8+
+Riippuvuudet: tkinter, datetime, re, os, json
+Tiedostomuoto: ADI 3.1.0
+Merkistökoodaus: UTF-8
+Aikavyöhyke: GMT/UTC
+Aikaformaatti: 24h (HH:MM:SS)
+
+═══════════════════════════════════════════════════════════════
+TESTATUT TOIMINNOT:
+═══════════════════════════════════════════════════════════════
+
+✓ FreeDV-mode syöttö ja tallennus
+✓ WWFF-tunnistus (ei mene COMMENT-kenttään)
+✓ GMT/UTC aika
+✓ Muokkaus ajon aikana (kutsu, bandi, mode, RST, WWFF, kommentti)
+✓ Poisto
+✓ Lokien yhdistäminen aikajärjestykseen
+✓ "Paskalokien" lataus (DATE, WWFF_REF kentät)
+✓ QSO-lokin värit (vaalea tausta, paitsi retro)
+✓ Retro-teema (musta tausta, vihreä teksti)
+✓ ADI 3.1.0 yhteensopivuus
+
+═══════════════════════════════════════════════════════════════
+KORJAUSHISTORIA v1.2.0:
+═══════════════════════════════════════════════════════════════
+
+1. FreeDV-mode lisätty 7 kohtaan
+2. WWFF-tunnistus korjattu (3 kohtaa)
+3. ADI-kenttien järjestys korjattu
+4. GMT/UTC aika (13 kohtaa)
+5. Muokkaus ja poisto lisätty
+6. Teemat karsittu 5:een
+7. Retro-teema korjattu
+8. QSO-lokin värit korjattu
+9. parse_adi_content parannettu
+10. Lokien yhdistäminen aikajärjestykseen
+
+═══════════════════════════════════════════════════════════════
+73 de OH3ENK!
+═══════════════════════════════════════════════════════════════

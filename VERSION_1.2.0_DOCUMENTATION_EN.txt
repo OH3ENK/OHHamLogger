@@ -1,0 +1,286 @@
+═══════════════════════════════════════════════════════════════
+  OHHamLogger v1.2.0 - WORKING VERSION
+  Developer: OH3ENK
+  Updated: December 1, 2024
+═══════════════════════════════════════════════════════════════
+
+FILE: OHHamLog1_2_0_TOIMIVA_VERSIO.py
+LINES: 2520
+LANGUAGE: Python 3 + Tkinter
+
+═══════════════════════════════════════════════════════════════
+NEW FEATURES V1.2.0:
+═══════════════════════════════════════════════════════════════
+
+1. FREEDV MODE
+   ✓ Added FreeDV mode to all mode lists
+   ✓ Works in input, save and load
+   ✓ ADI compliant
+
+2. IMPROVED WWFF RECOGNITION
+   ✓ WWFF reference recognized from input (e.g. OHFF-1234)
+   ✓ Saved correctly to SIG and SIG_INFO fields
+   ✓ NO LONGER goes to COMMENT field
+   ✓ Also supports legacy WWFF_REF and MY_WWFF_REF fields
+
+3. GMT/UTC TIME
+   ✓ All times in GMT/UTC
+   ✓ 24h system (00:00:00 - 23:59:59)
+   ✓ Clock display: "UTC: HH:MM:SS"
+
+4. EDIT DURING RUNTIME
+   ✓ Double-click log row → Edit
+   ✓ Right mouse button → Menu (Edit/Delete)
+   ✓ Editable fields:
+     - Callsign
+     - Band (combobox)
+     - Mode (combobox)
+     - RST Sent
+     - RST Received
+     - WWFF reference
+     - Comment
+
+5. LOG MERGING
+   ✓ Merges two ADI logs
+   ✓ Sorts chronologically
+   ✓ Removes duplicates
+   ✓ Asks for overwrite confirmation
+
+6. THEMES (5 total)
+   ✓ Default - dark blue-gray
+   ✓ Night - dark gray
+   ✓ Retro - BLACK background, GREEN text
+   ✓ Elegant - blue
+   ✓ Classic Amateur - Windows 95 gray
+
+7. QSO LOG COLORS
+   ✓ RETRO: Black background, green text, red duplicates
+   ✓ OTHERS: Light background, black text, red duplicates
+
+8. ADI COMPATIBILITY
+   ✓ Supports both QSO_DATE and DATE fields
+   ✓ Supports both SIG_INFO and WWFF_REF fields
+   ✓ Reads "shitlogs" (logs with wrong format)
+
+═══════════════════════════════════════════════════════════════
+INPUT FORMAT:
+═══════════════════════════════════════════════════════════════
+
+BASIC QSO:
+OH1ABC 59 59
+
+QSO + WWFF:
+OH1ABC 59 59 OHFF-1234
+
+QSO + WWFF + COMMENT:
+OH1ABC 59 59 OHFF-1234 Nice QSO
+
+NOTE: Input line label: "Input line: (RST received/sent)"
+
+═══════════════════════════════════════════════════════════════
+ADI SAVE FORMAT:
+═══════════════════════════════════════════════════════════════
+
+FIELD ORDER:
+1. STATION_CALLSIGN
+2. CALL
+3. QSO_DATE
+4. TIME_ON
+5. BAND
+6. MODE
+7. RST_SENT
+8. RST_RCVD
+9. MY_SIG (if mywwff is set)
+10. MY_SIG_INFO (if mywwff is set)
+11. SIG (if their WWFF)
+12. SIG_INFO (if their WWFF)
+13. MY_GRIDSQUARE
+14. COMMENT (only if not empty)
+15. OPERATOR
+16. EOR
+
+FILENAME:
+- If WWFF: OH3ENK@OHFF-0029.adi
+- If locator: OH3ENK@KP20TH.adi
+- Otherwise: OH3ENK.adi
+
+═══════════════════════════════════════════════════════════════
+SUPPORTED BANDS:
+═══════════════════════════════════════════════════════════════
+
+160m, 80m, 60m, 40m, 30m, 20m, 17m, 15m, 12m, 10m, 6m, 2m, 70cm
+
+═══════════════════════════════════════════════════════════════
+SUPPORTED MODES:
+═══════════════════════════════════════════════════════════════
+
+SSB, LSB, USB, CW, FM, AM, FT8, FT4, RTTY, PSK, FreeDV
+
+═══════════════════════════════════════════════════════════════
+WWFF RECOGNITION:
+═══════════════════════════════════════════════════════════════
+
+SUPPORTED FORMATS:
+- OHFF-1234 (Finland)
+- DLFF-1234 (Germany)
+- GFF-1234 (UK)
+- GMFF-1234, GWFF-1234, GIFF-1234, GUFF-1234 (UK regions)
+- FF-OH-1234 (alternative format)
+
+RECOGNITION:
+- 2-4 letter prefix + FF + 1-4 digit number
+- Automatically removed from comment field
+- Saved to SIG and SIG_INFO fields
+
+═══════════════════════════════════════════════════════════════
+KEYBOARD SHORTCUTS:
+═══════════════════════════════════════════════════════════════
+
+Enter           = Save QSO
+Double-click    = Edit QSO
+Right mouse     = Edit/Delete menu
+
+═══════════════════════════════════════════════════════════════
+TECHNICAL DETAILS:
+═══════════════════════════════════════════════════════════════
+
+Python version: 3.8+
+Dependencies: tkinter, datetime, re, os, json
+File format: ADI 3.1.0
+Character encoding: UTF-8
+Time zone: GMT/UTC
+Time format: 24h (HH:MM:SS)
+
+═══════════════════════════════════════════════════════════════
+TESTED FUNCTIONS:
+═══════════════════════════════════════════════════════════════
+
+✓ FreeDV mode input and save
+✓ WWFF recognition (doesn't go to COMMENT field)
+✓ GMT/UTC time
+✓ Runtime editing (callsign, band, mode, RST, WWFF, comment)
+✓ Deletion
+✓ Log merging in chronological order
+✓ Shitlog loading (DATE, WWFF_REF fields)
+✓ QSO log colors (light background, except retro)
+✓ Retro theme (black background, green text)
+✓ ADI 3.1.0 compatibility
+
+═══════════════════════════════════════════════════════════════
+FIX HISTORY v1.2.0:
+═══════════════════════════════════════════════════════════════
+
+1. FreeDV mode added to 7 locations
+2. WWFF recognition fixed (3 locations)
+3. ADI field order corrected
+4. GMT/UTC time (13 locations)
+5. Edit and delete added
+6. Themes reduced to 5
+7. Retro theme fixed
+8. QSO log colors fixed
+9. parse_adi_content improved
+10. Log merging in chronological order
+
+═══════════════════════════════════════════════════════════════
+WHAT IS A "SHITLOG"?
+═══════════════════════════════════════════════════════════════
+
+A "shitlog" is a poorly formatted ADI file that doesn't follow 
+proper ADI 3.1.0 standards but is still readable by some logging 
+software. Common issues:
+
+❌ All fields on one line (not separate lines)
+❌ Uses DATE instead of QSO_DATE
+❌ Uses WWFF_REF instead of SIG_INFO
+❌ Uses MY_WWFF_REF instead of MY_SIG_INFO
+❌ Missing proper field spacing
+❌ Incorrect field ordering
+
+OHHamLogger v1.2.0 can now read these "shitlogs" by:
+✓ Supporting both DATE and QSO_DATE
+✓ Supporting both WWFF_REF and SIG_INFO
+✓ Supporting both MY_WWFF_REF and MY_SIG_INFO
+✓ Flexible field parsing (fields can be on one line)
+
+This ensures compatibility with logs created by older or 
+non-compliant logging software.
+
+═══════════════════════════════════════════════════════════════
+RETRO THEME DETAILS:
+═══════════════════════════════════════════════════════════════
+
+The retro theme emulates old CRT terminal displays:
+
+COLORS:
+- Background: Pure black (#000000)
+- Text: Bright green (#00ff00)
+- Duplicates: Red (#ff0000)
+- Cursor: Green (#00ff00)
+
+APPLIES TO:
+✓ QSO log display
+✓ Input field
+✓ All labels
+✓ All buttons
+✓ All frames
+✓ Menu bar
+
+INSPIRED BY:
+Classic 1970s-1980s computer terminals and amateur radio 
+equipment displays. Popular among vintage equipment enthusiasts 
+and operators who prefer low-eye-strain displays.
+
+═══════════════════════════════════════════════════════════════
+TROUBLESHOOTING:
+═══════════════════════════════════════════════════════════════
+
+Q: WWFF reference appears in comment field after loading log
+A: The log was created with old version. Edit the QSO and remove 
+   WWFF from comment field manually.
+
+Q: Cannot open old ADI log
+A: Try using "shitlog" compatibility mode - v1.2.0 supports 
+   alternative field names (DATE, WWFF_REF, MY_WWFF_REF).
+
+Q: Time is wrong
+A: All times are in GMT/UTC. Check your system time zone 
+   settings if needed.
+
+Q: Cannot edit band or mode
+A: This feature was added in v1.2.0. Make sure you're using 
+   the latest version.
+
+Q: Retro theme colors don't apply
+A: Try switching to another theme and back to retro. The colors 
+   should update properly.
+
+═══════════════════════════════════════════════════════════════
+FUTURE ENHANCEMENTS (PLANNED):
+═══════════════════════════════════════════════════════════════
+
+🔮 DXCC entity recognition
+🔮 CQ/ITU zone support
+🔮 Contest logging mode
+🔮 LOTW integration
+🔮 Map display with worked stations
+🔮 Statistics and awards tracking
+🔮 Export to Cabrillo format
+🔮 Real-time DX cluster integration
+
+═══════════════════════════════════════════════════════════════
+CREDITS:
+═══════════════════════════════════════════════════════════════
+
+Developer: OH3ENK
+License: Open Source (specify license here)
+Contact: (contact info here)
+
+Special thanks to:
+- Finnish amateur radio community
+- WWFF program organizers
+- ADI format standard maintainers
+- Beta testers and bug reporters
+
+═══════════════════════════════════════════════════════════════
+73 de OH3ENK!
+═══════════════════════════════════════════════════════════════
